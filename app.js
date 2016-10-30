@@ -4,9 +4,10 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var crypto = require('crypto');
 var redis = require('redis');
-//var redis_client = redis.createClient("6379","127.0.0.1");
-var redis_client = redis.createClient();
 
+//Redis DB Default login 127.0.0.1 : 6379
+var redis_client = redis.createClient();
+//Connect to Redis
 redis_client.on('connect', function() {
 	 console.log('Redis Connected');
 });
@@ -49,7 +50,7 @@ app.post('/index.html', function(request, response){
 	});
 	console.log(key);
 	console.log(url);
-	response.end('<html><body><h3>'+key+'</h3></body></html>');
+	response.end('<html><body><h3>http://localhost:3000/'+key+'</h3></body></html>');
 	//response.sendFile(path.join(__dirname+'/public'+'/result.html'));
 });
 
