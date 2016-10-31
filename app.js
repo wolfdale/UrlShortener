@@ -12,7 +12,7 @@ redis_client.on('connect', function() {
 	 console.log('Redis Connected');
 });
 
-
+//app.use(express.logger('dev'));
 shasum = crypto.createHash('sha1');
 app.use(bodyParser.urlencoded({ extended: false })) 
 app.use(bodyParser.json());
@@ -41,7 +41,12 @@ app.get('/*', function(request,response){
 
 app.post('/index.html', function(request, response){
 	var url = request.body.id;
-	//validate URL
+	// Validate URL 
+	var pattern = /^((http|https|ftp):\/\/www.)/;
+	if(!pattern.test(url)){
+		response.end('<html><body><h3>INVALID URL</h3></body></html>');
+		return;
+	}
 	shasum = crypto.createHash('sha1');
 	shasum.update(url);
 	key = shasum.digest('hex');
@@ -51,7 +56,6 @@ app.post('/index.html', function(request, response){
 	console.log(key);
 	console.log(url);
 	response.end('<html><body><h3>http://localhost:3000/'+key+'</h3></body></html>');
-	//response.sendFile(path.join(__dirname+'/public'+'/result.html'));
 });
 
 
