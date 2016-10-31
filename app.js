@@ -30,8 +30,13 @@ app.get('/*', function(request,response){
 	}
 	console.log(url);
 	redis_client.get(url, function(err,res){
-		//do errror handling
+		//No key present in redis
+		if(res == null){
+			response.end('<html><body><h3>INVALID KEY</h3></body></html>');
+			return;
+		}
 		console.log(res);
+		//Redirect to Original URL
 		response.writeHead(301,{Location:res});
 		response.end();
 		
